@@ -105,7 +105,7 @@ export async function suggestWorkouts(userEmail: string) {
     return { type, focus };
   });
   const focusPriority = [...new Set([user.fitnessGoal.trim().toLowerCase(), ...activityFocus.map(({ focus }) => focus)])];
-  const workouts = await Workout.find({ focus: { $in: focusPriority } }).lean();
+  const workouts = await Workout.find({ focus: { $in: focusPriority } }).collation({ locale: 'en', strength: 2 }).lean();
   const focusRank = new Map(focusPriority.map((focus, index) => [focus, index]));
   return workouts
     .sort((left, right) => (focusRank.get(left.focus.toLowerCase()) ?? Infinity) - (focusRank.get(right.focus.toLowerCase()) ?? Infinity))
