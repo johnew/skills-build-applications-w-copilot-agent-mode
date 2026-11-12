@@ -38,8 +38,16 @@ test('exercise metadata passes structural and safety validation', () => {
 });
 
 test('starter scaffold does not pass learner grading before implementation', () => {
-  for (const name of ['step1-architecture', 'step2-data', 'step3-api', 'step4-frontend']) {
-    assert.throws(() => checks[name](repositoryRoot));
+  const incompleteFixtures = {
+    'step1-architecture': (root) => write(root, 'docs/architecture.md', ''),
+    'step2-data': (root) => write(root, 'octofit-tracker/backend/src/models/User.ts', ''),
+    'step3-api': (root) => write(root, 'octofit-tracker/backend/src/routes/api.ts', ''),
+    'step4-frontend': (root) => write(root, 'octofit-tracker/frontend/src/components/Activities.tsx', 'export default function Activities() { return <h1>Activities</h1>; }'),
+  };
+  for (const [name, makeIncomplete] of Object.entries(incompleteFixtures)) {
+    const root = copyAll();
+    makeIncomplete(root);
+    assert.throws(() => checks[name](root));
   }
 });
 
@@ -223,6 +231,7 @@ test('step one requires a completed architecture plan', () => {
 
 test('data grader rejects placeholder seed script', () => {
   const root = copyAll();
+  write(root, 'octofit-tracker/backend/src/scripts/seed.ts', '// TODO: Learners implement the seed script');
   assert.throws(() => checks['step2-data'](root), /required validation|placeholder/);
 });
 
