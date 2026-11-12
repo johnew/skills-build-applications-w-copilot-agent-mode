@@ -1,10 +1,11 @@
+import { getJson } from '../api/client.js';
 import { useApiResource } from '../api/useApiResource.js';
 
 type LeaderboardEntry = { teamName: string; totalPoints: number; rank: number };
 type LeaderboardResponse = { leaderboard: LeaderboardEntry[] };
 
 export default function Leaderboard() {
-  const { data, loading, error } = useApiResource<LeaderboardResponse>('/api/leaderboard');
+  const { data, loading, error } = useApiResource<LeaderboardResponse>('/api/leaderboard', getJson<LeaderboardResponse>);
 
   return <section aria-labelledby="leaderboard-heading" className="mb-4">
     <h2 id="leaderboard-heading" className="h4">Leaderboard</h2>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getJson } from '../api/client.js';
 import { useApiResource } from '../api/useApiResource.js';
 
 type Workout = { title: string; focus: string; minutes: number; difficulty: string; reason: string };
@@ -6,7 +7,10 @@ type WorkoutResponse = { suggestions: Workout[] };
 
 export default function Workouts() {
   const [userEmail, setUserEmail] = useState('mona@example.com');
-  const { data, loading, error } = useApiResource<WorkoutResponse>(`/api/workouts/suggestions/${encodeURIComponent(userEmail)}`);
+  const { data, loading, error } = useApiResource<WorkoutResponse>(
+    `/api/workouts/suggestions/${encodeURIComponent(userEmail)}`,
+    getJson<WorkoutResponse>,
+  );
 
   return <section aria-labelledby="workouts-heading" className="mb-4">
     <h2 id="workouts-heading" className="h4">Workout suggestions</h2>

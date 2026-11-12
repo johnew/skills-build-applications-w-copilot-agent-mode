@@ -1,10 +1,11 @@
+import { getJson } from '../api/client.js';
 import { useApiResource } from '../api/useApiResource.js';
 
 type Activity = { type: string; minutes: number; points: number; occurredAt?: string };
 type ActivityResponse = { activities: Activity[] };
 
 export default function Activities() {
-  const { data, loading, error } = useApiResource<ActivityResponse>('/api/activities');
+  const { data, loading, error } = useApiResource<ActivityResponse>('/api/activities', getJson<ActivityResponse>);
 
   return <section aria-labelledby="activities-heading" className="mb-4">
     <h2 id="activities-heading" className="h4">Activities</h2>

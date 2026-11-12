@@ -1,10 +1,11 @@
+import { getJson } from '../api/client.js';
 import { useApiResource } from '../api/useApiResource.js';
 
 type Team = { _id?: string; name: string; mascot: string; members: unknown[] };
 type TeamResponse = { teams: Team[] };
 
 export default function Teams() {
-  const { data, loading, error } = useApiResource<TeamResponse>('/api/teams');
+  const { data, loading, error } = useApiResource<TeamResponse>('/api/teams', getJson<TeamResponse>);
 
   return <section aria-labelledby="teams-heading" className="mb-4">
     <h2 id="teams-heading" className="h4">Teams</h2>
