@@ -74,7 +74,7 @@ export async function listTeams() {
 
 export async function createTeam(input: unknown) {
   const teamInput = parseTeamInput(input);
-  const members = [...new Set(teamInput.members ?? [])];
+  const members = [...new Set((teamInput.members ?? []).map((member) => member.toLowerCase()))];
   if (members.length) {
     const existingMembers = await User.find({ _id: { $in: members } }).select('_id').lean();
     if (existingMembers.length !== members.length) throw httpError(400, 'Every team member must be an existing user');
